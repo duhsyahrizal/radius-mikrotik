@@ -12,7 +12,7 @@ include('../sql/connection.php');
   if($action == 'login'){
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $remember = isset($_POST['remember'])?$_POST['remember']:'';
+    $remember = $_POST['remember'];
     $token = openssl_random_pseudo_bytes(16);
     // connection
     $conn = new mysqli($servername, $userdb, $passworddb, $database);
@@ -26,7 +26,7 @@ include('../sql/connection.php');
     $token = bin2hex($token);
     
     if($check > 0){
-      if($remember){
+      if($remember == true){
         setcookie("username", $username, $time + 60*60*24*30, '/');
         setcookie("password", $password, $time + 60*60*24*30, '/');
         setcookie("remember", 1, $time + 60*60*24*30, '/');
@@ -319,7 +319,7 @@ include('../sql/connection.php');
             "name" => $name,
             "validity" => $validity,
             "price" => $price,
-            "starts-at" => "logon",
+            "starts-at" => "now",
             "override-shared-users" => "unlimited"
           ));
           $add_limit = $API->comm("/tool/user-manager/profile/limitation/add", array(

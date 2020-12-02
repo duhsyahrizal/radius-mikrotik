@@ -69,7 +69,8 @@
   $("#submit").on("click", function(){
     var username = $("#username").val();
     var password = $("#password").val();
-    var remember = $("#remember").val();
+    var remember = $('#remember').is(":checked");
+
     $(this).addClass('disabled');
     $(".loader").removeClass('d-none');
     setTimeout(() => {
@@ -83,6 +84,7 @@
         },
         success: function(res) {
           // console.log(invalidLogin);
+          console.log(res);
           if (res == "success") {
             window.location.href = "index.php";
           }else{
