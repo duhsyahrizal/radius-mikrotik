@@ -89,7 +89,7 @@ if(!$API->connect($host, $user, $pass)){
                   <td id="package_name"><?= $row["package_name"] ?></td>
                   <td><?= ($row["active_period"] == "4w2d") ? "30 days" : $row["active_period"] ?></td>
                   <td>Rp. <?= number_format($row['price'], 2, ",", ".") ?></td>
-                  <td class="py-2"><button type="button" class="btn btn-light btn-sm openModal" data-id="<?= $row['mikrotik_id']?>" data-toggle="modal" data-id data-target="#myModal"><i class="far fa-eye"> </i></button> <a class="btn btn-info btn-sm" href="./admin.php?task=edit-profile&id=<?= $row['mikrotik_id']?>"><i class="far fa-edit"></i></a> <button class="btn btn-danger btn-sm" onclick="deletePackage('<?= $row['profile_id'] ?>', '<?= $row['limitation_id'] ?>', '<?= $row['profile_limitation_id'] ?>')"><i class="px-1 far fa-trash-alt"></i></a></td>
+                  <td class="py-2"><button type="button" class="btn btn-light btn-sm openModal" data-id="<?= $row['mikrotik_id']?>" data-toggle="modal" data-id data-target="#myModal"><i class="far fa-eye"> </i></button> <a class="btn btn-info btn-sm" href="./admin.php?task=edit-profile&id=<?= $row['mikrotik_id']?>"><i class="far fa-edit"></i></a> <button class="btn btn-danger btn-sm" onclick="deletePackage('<?= $row['profile_id'] ?>', '<?= $row['limitation_id'] ?>', '<?= $row['profile_limitation_id'] ?>', '<?= $row['package_name'] ?>')"><i class="px-1 far fa-trash-alt"></i></a></td>
                 </tr>
                 <?php 
                   }
@@ -132,11 +132,10 @@ if(!$API->connect($host, $user, $pass)){
     })
   });
 
-  function deletePackage(id,id_2, id_3){
-    var package_name = $("#package_name").text();
+  function deletePackage(id,id_2, id_3, profile){
     Swal.fire({
       title: 'Action Delete',
-      text: "Are you sure to delete this Package?",
+      text: "Are you sure to delete package ("+profile+") ?",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

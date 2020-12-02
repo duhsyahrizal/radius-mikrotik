@@ -9,14 +9,23 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
+        <!-- Settings Dropdown Menu -->
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#">
+            <i class="fas fa-cog"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="userman/process.php?action=logout" id="_logout" class="dropdown-item"><small><i class="fas fa-sign-out-alt"></i> Logout</small></a>
+          </div>
+        </li>
+        <!-- <li class="nav-item">
           <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-cog"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right">
             <a href="userman/process.php?action=logout" id="_logout" class="dropdown-item"><small><i class="fas fa-sign-out-alt"></i> Logout</small></a>
           </div>
-        </li>
+        </li> -->
       </ul>
     </div>
   </nav>

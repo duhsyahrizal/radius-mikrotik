@@ -79,7 +79,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item <?= ($_SESSION['user'] != 'admin') ? 'd-none' : '' ?>">
             <a href="admin.php?token=<?=$_SESSION['token']?>&task=preference" class="nav-link">
               <i class="nav-icon fas fa-tools"></i>
               <p>

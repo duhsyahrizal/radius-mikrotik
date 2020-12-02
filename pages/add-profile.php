@@ -31,7 +31,7 @@
             <div class="form-row mb-3">
               <div class="col-10">
               <label for="rate_limit_rx">Quota Limit</label>
-                <input type="text" class="form-control" value="0" id="transfer_limit" name="transfer_limit" aria-describedby="volumeHelp">
+                <input type="text" class="form-control" value="0" id="transfer_limit" name="transfer_limit" aria-describedby="volumeHelp" autocomplete="off">
                 <small id="volumeHelp" class="form-text text-muted">Don't change this if you do not want to set by <strong>Volume based</strong>. Default Format Size (<strong>GB</strong>)</small>
               </div>
               <div class="col-2">
