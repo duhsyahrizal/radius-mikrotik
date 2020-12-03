@@ -1,3 +1,10 @@
+<?php
+  $sessi_user = $_SESSION['user'];
+  $sqlSessi = "SELECT role FROM bayhost_users WHERE username = '".$sessi_user."'";
+  $resSessi = $conn->query($sqlSessi);
+  $responseSessi = $resSessi->fetch_assoc();
+  $role = $responseSessi['role'];
+?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
@@ -5,7 +12,6 @@
            style="opacity: .8">
       <span class="ml-1 brand-text">Bayhost Radius</span>
     </a>
-
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
@@ -79,7 +85,15 @@
               </p>
             </a>
           </li>
-          <li class="nav-item <?= ($_SESSION['user'] != 'admin') ? 'd-none' : '' ?>">
+          <li class="nav-item <?= ($role != 1) ? 'd-none' : '' ?>">
+            <a href="admin.php?token=<?=$_SESSION['token']?>&task=manage-user" class="nav-link">
+              <i class="nav-icon fas fa-user-cog"></i>
+              <p>
+                Manage Users
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="admin.php?token=<?=$_SESSION['token']?>&task=preference" class="nav-link">
               <i class="nav-icon fas fa-tools"></i>
               <p>

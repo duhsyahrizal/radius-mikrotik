@@ -47,8 +47,8 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="<?=$linklogin?>">Login</a></li>
-                    <li><a href="#status" id="alert">Status</a></li>
-                    <li class="active"><a href="#logout" id="alert">Logout</a></li>
+                    <!-- <li><a href="#status" id="alert">Status</a></li> -->
+                    <!-- <li class="active"><a href="#logout" id="alert">Logout</a></li> -->
                 </ul>
             </div>
         </div>

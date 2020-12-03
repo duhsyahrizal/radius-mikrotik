@@ -79,6 +79,50 @@ include('../sql/connection.php');
     session_destroy();
     header("Location:../index.php");
   }
+  else if($data == 'user-bayhost'){
+    if($action == 'edit-user'){
+      $user_id = $_GET['user_id'];
+      $sql = "SELECT 
+      bayhost_users.bayhost_user_id,
+      bayhost_users.username,
+      bayhost_users.password,
+      role_group.role_name,
+      role_group.manage_user,
+      role_group.manage_package
+      FROM bayhost_users
+      INNER JOIN role_group ON role_group.role_group_id = bayhost_users.role
+      WHERE bayhost_user_id = ".$user_id;
+      $result = $conn->query($sql);
+      $response = $result->fetch_assoc();
+      echo json_encode($response);
+    }
+    else if($action == 'update-user'){
+      $user_id = $_POST['user_id'];
+      $username = $_POST['username'];
+      $password = $_POST['password'];
+      $group = $_POST['group'];
+      $manage_package = $_POST['manage_package'];
+      $manage_user = $_POST['manage_user'];
+      $sqlUser = "UPDATE bayhost_users SET `username` = '".$username."', `password` = '".$password."', `role` = $group WHERE bayhost_user_id = $user_id";
+      // $sqlRole = "UPDATE role_group SET `username` = '".$username."', `password` = '".$password."', `role` = ".$group."";
+      $result = $conn->query($sqlUser);
+      if($result){
+        echo 'success';
+      }else{
+        echo 'failed';
+      }
+    }
+    else if($action == 'delete-user'){
+      $user_id = $_POST['user_id'];
+      $sql = "DELETE FROM bayhost_users WHERE bayhost_user_id = $user_id";
+      $result = $conn->query($sql);
+      if($result){
+        echo 'success';
+      }else{
+        echo 'failed';
+      }
+    }
+  }
   else if($data == 'user'){
     if($action == 'save'){
       if($_POST['username'] != ''){

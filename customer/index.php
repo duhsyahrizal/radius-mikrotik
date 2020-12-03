@@ -48,8 +48,7 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="active"><a href="<?= $linklogin ?>">Login</a></li>
-                    <li><a href="#status" id="alert">Status</a></li>
-                    <li><a href="#logout" id="alert">Logout</a></li>
+                    <!-- <li><a href="package-list.php" id="alert">Package</a></li> -->
                 </ul>
             </div>
         </div>
@@ -108,7 +107,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-primary btn-block btn-lg">OK</button>
+                                    <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
                                 </div>
                             </div>
                         </form>

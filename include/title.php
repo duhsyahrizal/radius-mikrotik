@@ -35,6 +35,9 @@ if(isset($_GET['task'])){
       case 'system':
         $title = ucfirst($task);
         break;
+      case 'manage-user':
+        $title = 'Manage User';
+        break;
       case 'preference':
         $title = ucfirst($task);
         break;

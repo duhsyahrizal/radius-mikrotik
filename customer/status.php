@@ -47,8 +47,8 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#login">Login</a></li>
                     <li class="active"><a href="<?=$linkstatus?>" id="alert">Status</a></li>
+                    <!-- <li><a href="active-period.php">My Package</a></li> -->
                     <li><a href="<?=$linklogout?>" id="alert">Logout</a></li>
                 </ul>
             </div>
@@ -71,7 +71,8 @@
                 <?php if($error) : ?>
                     <div class="alert alert-danger"><?php echo $error; ?></div>
                 <?php endif; ?>
-            </div>        
+            </div>
+            <div class="alert alert-info">If nothing happen, please <a href="http://bayhost.lan">click here</a></div>
             <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-body">

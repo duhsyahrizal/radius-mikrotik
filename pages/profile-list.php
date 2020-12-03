@@ -5,7 +5,7 @@ $API->debug = false;
     
 $num = 0;
 if(!$API->connect($host, $user, $pass)){
-          echo "Mikrotik Could Not Connect.";
+  echo "Mikrotik Could Not Connect.";
 } else{
   $truncate = "TRUNCATE TABLE radius_package";
   $conn->query($truncate);
@@ -22,12 +22,21 @@ if(!$API->connect($host, $user, $pass)){
       ".proplist" => ".id"
     ));
     $rate_limit = isset($limitation[0]['rate-limit-rx']) ? $limitation[0]['rate-limit-rx'] : 0;
-    $sqlInsertId = "INSERT INTO mikrotik_package (`profile_id`, `limitation_id`, `profile_limitation_id`) VALUES ('".$data['.id']."', '".$limitation[0]['.id']."', '".$profLimit[0]['.id']."')";
-    $sqlSync = "INSERT INTO radius_package (`mikrotik_id`, `package_name`, `active_period`, `time_limit`, `quota_limit`, `rate_limit`, `price`) VALUES ('".$data[".id"]."', '".$data["name"]."', '".$data["validity"]."', '".$limitation[0]["uptime-limit"]."', '".$limitation[0]["transfer-limit"]."', '".$rate_limit."', '".$data["price"]."')";
+    $transfer_limit = isset($limitation[0]["transfer-limit"]) ? $limitation[0]["transfer-limit"] : 0;
+    $uptime_limit = isset($limitation[0]["uptime-limit"]) ? $limitation[0]["uptime-limit"] : '0s';
+    $limit_id = isset($limitation[0][".id"]) ? $limitation[0][".id"] : '';
+    $profLimit_id = isset($profLimit[0][".id"]) ? $profLimit[0][".id"] : '';
+    $sqlInsertId = "INSERT INTO mikrotik_package (`profile_id`, `limitation_id`, `profile_limitation_id`) VALUES ('".$data['.id']."', '".$limit_id."', '".$profLimit_id."')";
+    $sqlSync = "INSERT INTO radius_package (`mikrotik_id`, `package_name`, `active_period`, `time_limit`, `quota_limit`, `rate_limit`, `price`) VALUES ('".$data[".id"]."', '".$data["name"]."', '".$data["validity"]."', '".$uptime_limit."', ".$transfer_limit.", ".$rate_limit.", ".$data["price"].")";
     $conn->query($sqlInsertId);
     $conn->query($sqlSync);
+    // echo $sqlInsertId."<br>";
+    // echo $sqlSync."<br>";
+    // echo $limitation[0]["transfer-limit"];
+    // var_dump($uptime_limit);
   }
 }
+
 
 ?>
 <!-- Main content -->
@@ -78,7 +87,8 @@ if(!$API->connect($host, $user, $pass)){
                 mikrotik_package.profile_limitation_id,
                 mikrotik_package.limitation_id
                 FROM radius_package
-                INNER JOIN mikrotik_package ON radius_package.radius_package_id = mikrotik_package.mikrotik_package_id";
+                INNER JOIN mikrotik_package ON radius_package.radius_package_id = mikrotik_package.mikrotik_package_id
+                WHERE radius_package.active_period = '4w2d'";
                 
                 $result = $conn->query($sql);
                 echo $conn->error;
@@ -89,7 +99,7 @@ if(!$API->connect($host, $user, $pass)){
                   <td id="package_name"><?= $row["package_name"] ?></td>
                   <td><?= ($row["active_period"] == "4w2d") ? "30 days" : $row["active_period"] ?></td>
                   <td>Rp. <?= number_format($row['price'], 2, ",", ".") ?></td>
-                  <td class="py-2"><button type="button" class="btn btn-light btn-sm openModal" data-id="<?= $row['mikrotik_id']?>" data-toggle="modal" data-id data-target="#myModal"><i class="far fa-eye"> </i></button> <a class="btn btn-info btn-sm" href="./admin.php?task=edit-profile&id=<?= $row['mikrotik_id']?>"><i class="far fa-edit"></i></a> <button class="btn btn-danger btn-sm" onclick="deletePackage('<?= $row['profile_id'] ?>', '<?= $row['limitation_id'] ?>', '<?= $row['profile_limitation_id'] ?>', '<?= $row['package_name'] ?>')"><i class="px-1 far fa-trash-alt"></i></a></td>
+                  <td class="py-2"><button type="button" class="btn btn-light btn-sm openModal" data-mikrotik="<?= $row['mikrotik_id']?>" data-toggle="modal" data-target="#myModal"><i class="far fa-eye"> </i></button> <a class="btn btn-info btn-sm" href="./admin.php?task=edit-profile&id=<?= $row['mikrotik_id']?>"><i class="far fa-edit"></i></a> <button class="btn btn-danger btn-sm" onclick="deletePackage('<?= $row['profile_id'] ?>', '<?= $row['limitation_id'] ?>', '<?= $row['profile_limitation_id'] ?>', '<?= $row['package_name'] ?>')"><i class="px-1 far fa-trash-alt"></i></a></td>
                 </tr>
                 <?php 
                   }
@@ -124,9 +134,9 @@ if(!$API->connect($host, $user, $pass)){
       pageLength: 25,
     });
     $('.openModal').on('click', function(){
-      var user_id = $(this).attr('data-id');
-      console.log(user_id);
-      $.ajax({url:"./modal/modal_profile.php?id="+user_id,cache:false,success:function(result){
+      var mikrotik = $(this).attr('data-mikrotik');
+      console.log(mikrotik);
+      $.ajax({url:"./modal/modal_profile.php?id="+mikrotik,cache:false,success:function(result){
           $(".modal-content").html(result);
       }});
     })
