@@ -22,12 +22,21 @@ if(!$API->connect($host, $user, $pass)){
       ".proplist" => ".id"
     ));
     $rate_limit = isset($limitation[0]['rate-limit-rx']) ? $limitation[0]['rate-limit-rx'] : 0;
-    $sqlInsertId = "INSERT INTO mikrotik_package (`profile_id`, `limitation_id`, `profile_limitation_id`) VALUES ('".$data['.id']."', '".$limitation[0]['.id']."', '".$profLimit[0]['.id']."')";
-    $sqlSync = "INSERT INTO radius_package (`mikrotik_id`, `package_name`, `active_period`, `time_limit`, `quota_limit`, `rate_limit`, `price`) VALUES ('".$data[".id"]."', '".$data["name"]."', '".$data["validity"]."', '".$limitation[0]["uptime-limit"]."', '".$limitation[0]["transfer-limit"]."', '".$rate_limit."', '".$data["price"]."')";
+    $transfer_limit = isset($limitation[0]["transfer-limit"]) ? $limitation[0]["transfer-limit"] : 0;
+    $uptime_limit = isset($limitation[0]["uptime-limit"]) ? $limitation[0]["uptime-limit"] : '0s';
+    $limit_id = isset($limitation[0][".id"]) ? $limitation[0][".id"] : '';
+    $profLimit_id = isset($profLimit[0][".id"]) ? $profLimit[0][".id"] : '';
+    $sqlInsertId = "INSERT INTO mikrotik_package (`profile_id`, `limitation_id`, `profile_limitation_id`) VALUES ('".$data['.id']."', '".$limit_id."', '".$profLimit_id."')";
+    $sqlSync = "INSERT INTO radius_package (`mikrotik_id`, `package_name`, `active_period`, `time_limit`, `quota_limit`, `rate_limit`, `price`) VALUES ('".$data[".id"]."', '".$data["name"]."', '".$data["validity"]."', '".$uptime_limit."', ".$transfer_limit.", ".$rate_limit.", ".$data["price"].")";
     $conn->query($sqlInsertId);
     $conn->query($sqlSync);
+    // echo $sqlInsertId."<br>";
+    // echo $sqlSync."<br>";
+    // echo $limitation[0]["transfer-limit"];
+    // var_dump($uptime_limit);
   }
 }
+
 
 ?>
 <!-- Main content -->
@@ -78,7 +87,8 @@ if(!$API->connect($host, $user, $pass)){
                 mikrotik_package.profile_limitation_id,
                 mikrotik_package.limitation_id
                 FROM radius_package
-                INNER JOIN mikrotik_package ON radius_package.radius_package_id = mikrotik_package.mikrotik_package_id";
+                INNER JOIN mikrotik_package ON radius_package.radius_package_id = mikrotik_package.mikrotik_package_id
+                WHERE radius_package.active_period = '4w2d'";
                 
                 $result = $conn->query($sql);
                 echo $conn->error;
