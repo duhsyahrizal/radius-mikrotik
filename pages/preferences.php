@@ -102,8 +102,8 @@ if(!$API->connect($host, $user, $pass)){
                   <td><?= $row['username'] ?></td>
                   <td><?= ($row['radius_package_name']!='')?$row['radius_package_name']:'Package Expired' ?></td>
                   <td><?= $row['shared_users'] ?></td>
-                  <td><small><i class="fa fa-circle <?= (strtotime($row['end_time']) < time() || $row['radius_package_name']=='') ? 'text-danger' : 'text-success' ?>"></i></small> <?= (strtotime($row['end_time']) < time() || $row['radius_package_name']=='') ? 'Expired' : 'Available' ?></td>
-                  <td class="py-2"><button type="button" class="btn btn-light btn-sm openModal" data-id="<?= $row['radius_user_id']?>" data-toggle="modal" data-target="#myModal"><i class="far fa-eye"> </i></button> <?= ($row['radius_package_name']!='')?'<a class="btn btn-info btn-sm" href="./admin.php?token='.$_SESSION["token"].'&task=edit-user&id='.$row["radius_user_id"].'"><i class="far fa-edit"></i></a>':''?> <button class="btn btn-danger btn-sm" onclick="deleteUser('<?=$row['mikrotik_id']?>','<?=$row['username']?>')"><i class="px-1 far fa-trash-alt"></i></button></td>
+                  <td><small><i class="fa fa-circle <?= (strtotime($row['end_time']) < time() || $row['radius_package_name']=='') ? 'text-danger' : 'text-success' ?>"></i></small> <?= (strtotime($row['end_time']) < time() || $row['radius_package_name']=='') ? 'Expired' : 'Active' ?></td>
+                  <td class="py-2"><button type="button" class="btn btn-light btn-sm openModal" data-id="<?= $row['radius_user_id']?>" data-toggle="modal" data-id data-target="#myModal"><i class="far fa-eye"> </i></button> <?= ($row['radius_package_name']!='')?'<a class="btn btn-info btn-sm" href="./admin.php?token='.$_SESSION["token"].'&task=edit-user&id='.$row["radius_user_id"].'"><i class="far fa-edit"></i></a>':''?> <button class="btn btn-danger btn-sm" onclick="deleteUser('<?=$row['mikrotik_id']?>','<?=$row['username']?>')"><i class="px-1 far fa-trash-alt"></i></button></td>
                </tr>
               <?php 
                  }

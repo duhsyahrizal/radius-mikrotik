@@ -23,6 +23,9 @@ if(isset($_GET['task'])){
       case 'add-profile':
         $title = 'Form Create Package';
         break;
+      case 'migration-package':
+        $title = 'Form Create Migration Package';
+        break;
       case 'edit-profile':
         $title = 'Form Edit Package';
         break;

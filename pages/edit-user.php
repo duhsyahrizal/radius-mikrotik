@@ -53,7 +53,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="basic-addon1"><i class="far fa-calendar-alt"></i></span>
                 </div>
-                <input placeholder="Please type for user's birthday" type="text" class="form-control datepicker" name="tgl_awal" aria-describedby="birthdayHelp">
+                <input placeholder="Please type for user's birthday" type="text" class="form-control datepicker" name="tgl_awal" aria-describedby="birthdayHelp" autocomplete="off">
               </div>
               <small id="birthdayHelp" class="form-text text-muted">Format Date : (<strong>dd-mm-yyyy</strong>). Example : 02-01-2000</small>
             </div>

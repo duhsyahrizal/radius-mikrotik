@@ -70,6 +70,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="admin.php?token=<?=$_SESSION['token']?>&task=migration-package" class="nav-link">
+              <i class="nav-icon fas fa-list-alt"></i>
+              <p>
+                Migration Package
+              </p>
+            </a>
+          </li>
           <li class="nav-header pt-3 pb-1">MISC</li>
           <li class="nav-item">
             <a href="admin.php?token=<?=$_SESSION['token']?>&task=report" class="nav-link <?= ($_GET['task'] == 'report-data') ? 'active' : '' ?>">
@@ -79,7 +87,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item <?= ($_SESSION['user'] != 'admin') ? 'd-none' : '' ?>">
             <a href="admin.php?token=<?=$_SESSION['token']?>&task=preference" class="nav-link">
               <i class="nav-icon fas fa-tools"></i>
               <p>

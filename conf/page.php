@@ -109,6 +109,9 @@ if(isset($_GET['task'])){
     case 'user-active':
       include 'pages/user-active.php';
       break;
+    case 'migration-package':
+      include 'pages/add-package.php';
+      break;
     case 'report':
       include 'pages/reports.php';
       break;

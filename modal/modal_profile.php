@@ -1,31 +1,33 @@
 <?php
 include('../conf/conf.php');
+include('../sql/connection.php');
 include_once('../lib/format-bytes.php');
 require_once('../lib/routeros_api.class.php');
-$API = new RouterosAPI();
-$API->debug = false;
-
-$pass = decrypt($pass);
-$num = 0;
-if(!$API->connect($host, $user, $pass)){
-    echo "Mikrotik Could Not Connect.";
-} else{
-  $m_id = $_GET['id'];
-  $profile = $API->comm("/tool/user-manager/profile/print", array(
-    "?.id" => $m_id
-  ));
-  foreach($profile as $row){
-    $profile_name = $row['name'];
-    $validity = ($row['validity']=='4w2d')?'30 days':'Unlimited';
-    $price = number_format($row['price'], 2, ",", ".");
-    $limitation = $API->comm("/tool/user-manager/profile/limitation/print", array(
-      ".proplist" => ".id,transfer-limit,rate-limit-rx",
-      "?name" => $profile_name
-    ));
-    $rate_limit = isset($limitation[0]['rate-limit-rx'])?$limitation[0]['rate-limit-rx']:0;
-    $rate_limit = convert_bytes_without_comm($rate_limit, 'K');
-    $quota = isset($limitation[0]['transfer-limit'])?$limitation[0]['transfer-limit']:0;
-  }
+$conn = new mysqli($servername, $userdb, $passworddb, $database);
+$m_id = $_GET['id'];
+$sql = "SELECT 
+        radius_package.radius_package_id,
+        radius_package.mikrotik_id,
+        radius_package.package_name,
+        radius_package.active_period,
+        radius_package.time_limit,
+        radius_package.quota_limit,
+        radius_package.rate_limit,
+        radius_package.price,
+        mikrotik_package.profile_id,
+        mikrotik_package.profile_limitation_id,
+        mikrotik_package.limitation_id
+        FROM radius_package
+        INNER JOIN mikrotik_package ON radius_package.radius_package_id = mikrotik_package.mikrotik_package_id
+        WHERE radius_package.mikrotik_id = '".$m_id."'";
+$result = $conn->query($sql);
+while($row = $result->fetch_assoc()){
+  $profile_name = $row['package_name'];
+  $validity = ($row['active_period']=='4w2d')?'30 days':$row['active_period'];
+  $price = number_format($row['price'], 2, ",", ".");
+  $rate_limit = isset($row['rate_limit'])?$row['rate_limit']:0;
+  $rate_limit = convert_bytes_without_comm($rate_limit, 'K');
+  $quota = isset($row['quota_limit'])?$row['quota_limit']:0;
 }
 ?>
 <div class="modal-header bg-primary">

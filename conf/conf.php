@@ -1,7 +1,7 @@
 <?php
-    $host = "20.1.1.1";
+    $host = "10.1.5.1";
     $user = "abduh";
-    $pass = "mZOWrZljamQ=";
+    $pass = "eZOWoGFkiqueaGJT";
     
 
     $option_shared_user = array("unlimited", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);

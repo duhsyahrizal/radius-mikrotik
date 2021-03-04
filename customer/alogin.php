@@ -24,7 +24,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Mikrotik Hotspot</title>
+    <title>Bayhost Internet | Redirect</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -47,12 +47,5 @@
 
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
-<script>
-    function refreshData(){
-        window.setTimeout(function(){
-            location.href = unescape('<?=$linkstatus?>');
-        }, 3000);
-    }
-</script>
 </body>
 </html>

@@ -23,40 +23,39 @@
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
-      <form action="userman/process.php?action=login" method="post">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" id="username" name="username" placeholder="Username">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
-            </div>
+      <div class="callout callout-danger d-none" id="loginFailed">
+        <h5>Login Failed!</h5>
+        <p>Username or password doesn't match</p>
+      </div>
+      <div>
+        <div class="form-group mb-3">
+          <input id="username" name="username" type="text" value="<?= isset($_COOKIE['username'])?$_COOKIE['username']:''?>" class="form-control" placeholder="Username" required>
+          <div class="invalid-feedback">
+            Please check again your username
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password" placeholder="Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
+        <div class="form-group mb-3">
+          <input id="password" name="password" type="password" value="<?= isset($_COOKIE['password'])?$_COOKIE['password']:''?>" class="form-control" placeholder="Password" required>
+          <div class="invalid-feedback">
+            Please check again your password
           </div>
         </div>
-        <!-- <div class="error mb-2"><?= ($errMessage != '') ? $errMessage : '' ?></div> -->
         <div class="row">
-          <div class="col-8">
+          <div class="col-7">
             <div class="icheck-primary">
-              <input type="checkbox" id="remember">
+              <input type="checkbox" id="remember" name="remember" <?= isset($_COOKIE['remember'])?'checked':''?>>
               <label for="remember">
                 Remember Me
               </label>
             </div>
           </div>
           <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          <div class="col-5">
+            <button type="submit" id="submit" class="btn btn-primary btn-block">Sign In <span class="ml-1 loader spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span></button>
           </div>
           <!-- /.col -->
         </div>
-      </form>
+      </div>
       
     </div>
     <!-- /.login-card-body -->
@@ -67,5 +66,37 @@
   include('./include/js-plugins.php');
 ?>
 <script>
-  $("#username").focus();
+  $("#submit").on("click", function(){
+    var username = $("#username").val();
+    var password = $("#password").val();
+    var remember = $('#remember').is(":checked");
+
+    $(this).addClass('disabled');
+    $(".loader").removeClass('d-none');
+    setTimeout(() => {
+      $.ajax({
+        method: "POST",
+        url: "./userman/process.php?action=login",
+        data: {
+          username: username,
+          password: password,
+          remember: remember,
+        },
+        success: function(res) {
+          // console.log(invalidLogin);
+          console.log(res);
+          if (res == "success") {
+            window.location.href = "index.php";
+          }else{
+            $("#username").addClass("is-invalid");
+            $("#password").addClass("is-invalid");
+            $("#loginFailed").removeClass("d-none");
+            $("#submit").removeClass('disabled');
+            $(".loader").addClass("d-none");
+          }
+        }
+      })
+    }, 3000);
+    
+  })
 </script>

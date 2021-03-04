@@ -12,29 +12,35 @@ include('../sql/connection.php');
   if($action == 'login'){
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $remember = isset($_POST['remember'])?$_POST['remember']:'';
     $token = openssl_random_pseudo_bytes(16);
     // connection
     $conn = new mysqli($servername, $userdb, $passworddb, $database);
     $sql = "SELECT * FROM bayhost_users WHERE `username` = '".$username."' AND `password` = '".$password."'";
+    $time = time();
     $matching = $conn->query($sql);
     $check = $matching->num_rows;
+    
 
     //Convert the binary data into hexadecimal representation.
     $token = bin2hex($token);
     
     if($check > 0){
+      if($remember === true){
+        setcookie("username", $username, $time + 60*60*24*30, '/');
+        setcookie("password", $password, $time + 60*60*24*30, '/');
+        setcookie("remember", 1, $time + 60*60*24*30, '/');
+      }else{
+
+      }
       $_SESSION['user'] = $username;
       $_SESSION['token'] = $token;
       $sql_insert = "INSERT INTO user_token (`username`, `token`, `modified_at`) VALUES ('".$username."', '".$_SESSION['token']."', '".$timestamp."')";
-      $sql_update = "UPDATE user_token set token='".$token."', modified_at='".$timestamp."' where username='".$username."'";
+      $sql_update = "UPDATE user_token set token='".$token."', modified_at='".$timestamp."' WHERE username='".$username."'";
       
       $sql_check_token="SELECT * from user_token where username='".$username."'";
       // Create connection
       $connect = new mysqli($servername, $userdb, $passworddb, $database);
-      // Check connection
-      if ($connect->connect_error) {
-        die("Connection failed: " . $connect->connect_error);
-      }
       // Update user token 
       $result_token = $connect->query($sql_check_token);
 
@@ -45,17 +51,28 @@ include('../sql/connection.php');
         // Insert token to table
         $connect->query($sql_insert);
       }
-      echo '<script language="javascript">';
-			echo 'alert("Welcome to Bayhost Radius, '.ucfirst($_SESSION['user']).'");';
-			echo 'window.location.href = "../admin.php?token='.$_SESSION['token'].'&task=dashboard";';
-			echo '</script>';
+      // $member = $matching->fetch_assoc();
+      // $data['username'];
+      // $data['password'];
+      // $data['remember'];
+      // // array_push($data, $member);
+      // array_push($data, $_COOKIE['username']);
+      // array_push($data, $_COOKIE['password']);
+      // array_push($data, $_COOKIE['remember']);
+      // $json = json_encode($data);
+      // echo $json;
+      echo 'success';
+      // echo '<script language="javascript">';
+			// echo 'alert("Welcome to Bayhost Radius, '.ucfirst($_SESSION['user']).'");';
+			// echo 'window.location.href = "../admin.php?token='.$_SESSION['token'].'&task=dashboard";';
+			// echo '</script>';
       // header("Location:../admin.php?token='.$_SESSION['token'].'&page=dashboard");
-    } else {
-        $errMessage = "Username & Password doesn't match!";
-        echo '<script language="javascript">';
-        echo 'alert("Please type username and password correctly.");';
-        echo 'window.location.href = "../index.php";';
-        echo '</script>';
+    }else {
+      echo 'failed';
+      // echo '<script language="javascript">';
+      // echo 'alert("Please type username and password correctly.");';
+      // echo 'window.location.href = "../index.php";';
+      // echo '</script>';
     }
   }
   else if($action == 'logout'){
@@ -304,7 +321,7 @@ include('../sql/connection.php');
             "name" => $name,
             "validity" => $validity,
             "price" => $price,
-            "starts-at" => "logon",
+            "starts-at" => "now",
             "override-shared-users" => "unlimited"
           ));
           $add_limit = $API->comm("/tool/user-manager/profile/limitation/add", array(

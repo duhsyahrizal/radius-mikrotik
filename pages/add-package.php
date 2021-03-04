@@ -42,7 +42,7 @@
               </select>
               </div>
             </div>
-            <label for="expired">Active Period :</label>
+            <!-- <label for="expired">Active Period :</label>
             <div class="ml-2 mb-3 form-check form-check-inline">
               <input class="form-check-input" type="radio" name="expired" id="inlineRadio1" value="30d" checked>
               <label class="form-check-label" for="inlineRadio1">30 days</label>
@@ -50,6 +50,10 @@
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="expired" id="inlineRadio2" value="60d">
               <label class="form-check-label" for="inlineRadio2">60 days</label>
+            </div> -->
+            <div class="form-group">
+              <label for="expired">Active Period</label>
+              <input type="text" class="form-control" id="expired" name="expired" placeholder="Please fill active period" autocomplete="off" required>
             </div>
             <div class="form-group">
               <label for="rate_limit">Rate Download/Upload</label>
